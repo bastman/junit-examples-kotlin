@@ -11,10 +11,10 @@ import org.junit.runner.RunWith
 @RunWith(JUnitPlatform::class)
 class DynamicCalculatorTest {
 
-    @TestFactory @DisplayName("suite: sum")
+    @TestFactory @DisplayName("suite: calculator.sum")
     fun sumTests():List<DynamicTest> = createSumTests()
 
-    @TestFactory @DisplayName("suite: sum")
+    @TestFactory @DisplayName("suite: calculator.subtract")
     fun subtractTests(): List<DynamicTest> = createSubtractTests()
 
     private val calculator = SimpleCalculator()
