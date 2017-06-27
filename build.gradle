@@ -26,6 +26,16 @@ subprojects {
         kotlinOptions.jvmTarget = "1.8"
     }
 
+    apply plugin: 'org.junit.platform.gradle.plugin'
+
+    junitPlatform {
+        // run JUnit 4 tests with the standard Gradle test task?
+        //enableStandardTestTask true
+        enableStandardTestTask true
+        reportsDir file('build/test-results/junit-platform')
+    }
+
+
     buildscript {
         repositories {
             maven { url "https://plugins.gradle.org/m2/" }
@@ -42,12 +52,21 @@ subprojects {
     }
 
     dependencies {
+        // kotlin-lang
         compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
         compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    }
 
-    kotlin {
-        experimental { coroutines 'enable' }
+        // tests: kluent & mockito
+        testCompile "org.amshove.kluent:kluent:$kluentVersion"
+        testCompile "com.nhaarman:mockito-kotlin:$mockitoKotlinVersion"
+
+        // tests: junit5 platform & engines (jupiter & vintage)
+        testCompile "org.junit.platform:junit-platform-runner:${junitPlatformVersion}"
+        testCompile("org.junit.platform:junit-platform-launcher:${junitPlatformVersion}")
+        testCompile "org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}"
+        testRuntime "org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}"
+        testRuntime "org.junit.vintage:junit-vintage-engine:${junitVintageVersion}"
+
     }
 
 }
