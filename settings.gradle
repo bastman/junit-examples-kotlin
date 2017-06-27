@@ -1,2 +1,3 @@
 include 'spek-example'
+include 'junit5-vanilla-example'
 
