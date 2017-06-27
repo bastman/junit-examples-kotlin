@@ -5,7 +5,7 @@ playground for junit-based testing frameworks
    - spek
    - junit5 (data-driven-tests)
    - kluent (and json-based assertions)
-
+   - kotlintest
 ## run ...
 
     $ ./gradlew clean test
@@ -33,7 +33,8 @@ playground for junit-based testing frameworks
                     ]
                     """
 
-
+### kotlintest-example
+   - specs
 
                     
                    
