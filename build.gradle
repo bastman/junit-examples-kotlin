@@ -63,7 +63,10 @@ subprojects {
         // tests: junit5 platform & engines (jupiter & vintage)
         testCompile "org.junit.platform:junit-platform-runner:${junitPlatformVersion}"
         testCompile("org.junit.platform:junit-platform-launcher:${junitPlatformVersion}")
+        // junit5 jupiter api: assertions & assumptions, ...
         testCompile "org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}"
+
+        // runtime engines: jupiter, vintage
         testRuntime "org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}"
         testRuntime "org.junit.vintage:junit-vintage-engine:${junitVintageVersion}"
 
