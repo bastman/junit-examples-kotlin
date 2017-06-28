@@ -5,7 +5,6 @@ import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeInstanceOf
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.DynamicTest
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 import org.junit.platform.runner.JUnitPlatform
 import org.junit.runner.RunWith
@@ -30,13 +29,11 @@ internal class DynamicCalculatorTest {
         return listOf(
             TestCase(
                 a = 1, b = 1, expectedResult = 2,
-                testNameSupplier = testName,
-                test = test
+                name = testName, test = test
             ),
             TestCase(
                 a = 5, b = 6, expectedResult = 11,
-                testNameSupplier = testName,
-                test = test
+                name = testName, test = test
             )
         ).map { it.toDynamicTest() }
     }
@@ -50,13 +47,11 @@ internal class DynamicCalculatorTest {
         return listOf(
             TestCase(
                 a = 10, b = 1, expectedResult = 9,
-                testNameSupplier = testName,
-                test = test
+                name = testName, test = test
             ),
             TestCase(
                 a = 5, b = 3, expectedResult = 200,
-                testNameSupplier = testName,
-                test = test
+                name = testName, test = test
             )
         ).map { it.toDynamicTest() }
     }
@@ -102,12 +97,12 @@ internal data class TestCase(
     val a: Int,
     val b: Int,
     val expectedResult: Int,
-    val testNameSupplier: (TestCase)->String,
+    val name: (TestCase)->String,
     val test:(TestCase)->Unit
 ) {
 
     fun testName():String {
-        return testNameSupplier(this)
+        return name(this)
     }
 
     fun toDynamicTest(): DynamicTest {
