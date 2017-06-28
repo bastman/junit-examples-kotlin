@@ -2,6 +2,7 @@ package com.example.demo.testutils.junit5
 
 import org.junit.jupiter.api.DynamicTest
 
+
 fun dynamicTest(
     name: String,
     test: () -> Unit
