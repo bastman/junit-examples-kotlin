@@ -14,13 +14,15 @@ internal class DynamicCalculatorTest {
 
     @TestFactory @DisplayName("suite: calculator.sum")
     fun sumTests(): List<DynamicTest> = createSumTests()
+        .map { it.toDynamicTest() }
 
     @TestFactory @DisplayName("suite: calculator.subtract")
     fun subtractTests(): List<DynamicTest> = createSubtractTests()
+        .map { it.toDynamicTest() }
 
     private val calculator = SimpleCalculator()
 
-    private fun createSumTests(): List<DynamicTest> {
+    private fun createSumTests(): List<TestCase> {
         val testName: (TestCase) -> String = {
             "Test calculator.sum(${it.a},${it.a}) should be ${it.expectedResult}"
         }
@@ -35,10 +37,10 @@ internal class DynamicCalculatorTest {
                 a = 5, b = 6, expectedResult = 11,
                 name = testName, test = test
             )
-        ).map { it.toDynamicTest() }
+        )
     }
 
-    private fun createSubtractTests(): List<DynamicTest> {
+    private fun createSubtractTests(): List<TestCase> {
         val testName: (TestCase) -> String = {
             "Test calculator.subtract(${it.a},${it.a}) should be ${it.expectedResult}"
         }
@@ -53,7 +55,7 @@ internal class DynamicCalculatorTest {
                 a = 5, b = 3, expectedResult = 200,
                 name = testName, test = test
             )
-        ).map { it.toDynamicTest() }
+        )
     }
 
     private fun sumTest(testCase: TestCase) = simpleSpec {
@@ -105,9 +107,13 @@ internal data class TestCase(
         return name(this)
     }
 
+    fun testCode():Unit {
+        return test(this)
+    }
+
     fun toDynamicTest(): DynamicTest {
         val testName = testName()
-        val block = { test(this) }
+        val block = { testCode() }
 
         return dynamicTest(testName, block)
     }
