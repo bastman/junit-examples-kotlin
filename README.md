@@ -41,7 +41,7 @@ playground for junit-based testing frameworks
    - showcases junit5 (@Test, @TestFactory)
    - wraps testcode into a flexible spec
    - create proper error messages including steps being executed
-   - has no build in assertion framework. just use the one you like
+   - provides no assertion framework, just use the ones you like
    
    Example:
    
