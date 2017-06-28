@@ -65,7 +65,7 @@ fun simpleSpec(name: String = "", block: SimpleSpec.() -> Unit) {
             "",
             "- steps: ",
             "",
-            spec.getSteps().joinToString(lineSeparator),
+            spec.getSteps().map { "* $it" }.joinToString(lineSeparator),
             "",
             "- cause:",
             ""
