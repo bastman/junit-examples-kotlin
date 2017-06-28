@@ -12,29 +12,11 @@ class SimpleSpec(private val name: String = "") {
 
     operator fun <T> String.invoke(block: SimpleSpec.() -> T): T {
         steps += this
-        //return block()
-
         try {
             return block()
         } catch(all: Throwable) {
-            val failures = ArrayList<Throwable>()
-            val multipleFailuresError = when (all) {
-                is AssertionError -> {
-                    val heading = this
-                    failures.add(all)
-                    MultipleFailuresError(heading, failures)
-                }
-                else -> {
-                    val failure = AssertionFailedError(
-                        "$all", all
-                    )
-                    val heading = this
-                    failures.add(failure)
-                    MultipleFailuresError(heading, failures)
-                }
-            }
 
-            throw multipleFailuresError
+            throw all.toStepFunctionError(heading = this)
         }
 
     }
@@ -60,10 +42,9 @@ fun simpleSpec(name: String = "", block: SimpleSpec.() -> Unit) {
     try {
         spec.apply(block)
     } catch (all: Throwable) {
-        val lineSeparator = System.getProperty("line.separator");
         val messages: List<String> = listOf(
             "Spec Failed!",
-            "", "======== SimpleSpec Failed! ======", "",
+            "", "======== Spec Trace ======", "",
             "- spec.name: ${spec.getName()}",
             "",
             "- steps: ",
@@ -75,22 +56,27 @@ fun simpleSpec(name: String = "", block: SimpleSpec.() -> Unit) {
         )
         val heading = messages.joinToString(lineSeparator)
 
-        val failures = ArrayList<Throwable>()
-        val multipleFailuresError = when (all) {
-            is AssertionError -> {
-                failures.add(all)
-                MultipleFailuresError(heading, failures)
-            }
-            else -> {
-                val failure = AssertionFailedError(
-                    "$all", all
-                )
-                failures.add(failure)
-                MultipleFailuresError(heading, failures)
-            }
-        }
+        throw all.toStepFunctionError(heading=heading)
+    }
+}
 
-        throw multipleFailuresError
+internal fun Throwable.toStepFunctionError(heading:String):MultipleFailuresError {
+    val failures = ArrayList<Throwable>()
+    val multipleFailuresError = when (this) {
+        is AssertionError -> {
+            failures.add(this)
+            MultipleFailuresError(heading, failures)
+        }
+        else -> {
+            val failure = AssertionFailedError(
+                "$this", this
+            )
+            failures.add(failure)
+            MultipleFailuresError(heading, failures)
+        }
     }
 
+    return multipleFailuresError
 }
+
+internal val lineSeparator = System.getProperty("line.separator");

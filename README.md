@@ -74,22 +74,37 @@ playground for junit-based testing frameworks
     
    Error Messages (example):
     
-    Failures (1):
-     JUnit Jupiter:DynamicCalculatorTest:suite: calculator.sum:Test calculator.sum(5,5) should be 1100
-       MethodSource [className = 'com.example.demo.DynamicCalculatorTest', methodName = 'sumTests', methodParameterTypes = '']
-       => org.opentest4j.MultipleFailuresError: Spec Failed!
+    ======== Spec Trace ======
     
-    - spec.name: com.example.demo.DynamicCalculatorTest.sumTest
+    - spec.name: Test calculator.subtract(5,5) should be 200
     
     - steps:
     
-    given: a calculator
-    when: calling calculator.sum(5,6)
-    it: should return 1100
+    * given: a calculator
+    * when: calling calculator.subtract(5,3)
+    * it: should return 200
     
     - cause: (1 failure)
-           it: should return 1100 (1 failure)
-           expected same:<1100> was not:<11>
+            it: should return 200 (1 failure)
+            expected same:<200> was not:<2>
+      JUnit Jupiter:DynamicCalculatorTest:suite: calculator.subtract:Test calculator.subtract(5,5) should be 400
+        MethodSource [className = 'com.example.demo.DynamicCalculatorTest', methodName = 'subtractTests', methodParameterTypes = '']
+        => org.opentest4j.MultipleFailuresError: Spec Failed!
+    
+    ======== Spec Trace ======
+    
+    - spec.name: Test calculator.subtract(5,5) should be 400
+    
+    - steps:
+    
+    * given: a calculator
+    * when: calling calculator.subtract(5,1)
+    * it: should return 400
+    
+    - cause: (1 failure)
+            it: should return 400 (1 failure)
+            expected same:<400> was not:<4>
+
         
                     
                    
