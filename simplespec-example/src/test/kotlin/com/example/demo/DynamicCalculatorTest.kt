@@ -5,6 +5,7 @@ import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeInstanceOf
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.DynamicTest
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 import org.junit.platform.runner.JUnitPlatform
 import org.junit.runner.RunWith
@@ -27,9 +28,17 @@ internal class DynamicCalculatorTest {
         val test: (TestCase) -> Unit = { sumTest(it) }
 
         return listOf(
-            TestCase(testName = testName, a = 1, b = 1, expectedResult = 2),
-            TestCase(testName = testName, a = 5, b = 6, expectedResult = 11)
-        ).map { testCase -> testCase.toDynamicTest(test) }
+            TestCase(
+                a = 1, b = 1, expectedResult = 2,
+                testNameSupplier = testName,
+                test = test
+            ),
+            TestCase(
+                a = 5, b = 6, expectedResult = 11,
+                testNameSupplier = testName,
+                test = test
+            )
+        ).map { it.toDynamicTest() }
     }
 
     private fun createSubtractTests(): List<DynamicTest> {
@@ -39,9 +48,17 @@ internal class DynamicCalculatorTest {
         val test: (TestCase) -> Unit = { subtractTest(it) }
 
         return listOf(
-            TestCase(testName = testName, a = 10, b = 1, expectedResult = 9),
-            TestCase(testName = testName, a = 5, b = 3, expectedResult = 2)
-        ).map { testCase -> testCase.toDynamicTest(test) }
+            TestCase(
+                a = 10, b = 1, expectedResult = 9,
+                testNameSupplier = testName,
+                test = test
+            ),
+            TestCase(
+                a = 5, b = 3, expectedResult = 200,
+                testNameSupplier = testName,
+                test = test
+            )
+        ).map { it.toDynamicTest() }
     }
 
     private fun sumTest(testCase: TestCase) = simpleSpec {
@@ -61,7 +78,7 @@ internal class DynamicCalculatorTest {
         }
     }
 
-    private fun subtractTest(testCase: TestCase) = simpleSpec {
+    private fun subtractTest(testCase: TestCase) = simpleSpec(name = testCase.testName()) {
         val calc = "given: a calculator" {
             val calc = calculator
             calculator shouldBeInstanceOf SimpleCalculator::class
@@ -85,13 +102,19 @@ internal data class TestCase(
     val a: Int,
     val b: Int,
     val expectedResult: Int,
-    val testName: (TestCase) -> String
+    val testNameSupplier: (TestCase)->String,
+    val test:(TestCase)->Unit
 ) {
-    fun toDynamicTest(block: (TestCase) -> Unit): DynamicTest {
-        val testName = testName(this)
-        val test: () -> Unit = { block(this) }
 
-        return dynamicTest(testName, test)
+    fun testName():String {
+        return testNameSupplier(this)
+    }
+
+    fun toDynamicTest(): DynamicTest {
+        val testName = testName()
+        val block = { test(this) }
+
+        return dynamicTest(testName, block)
     }
 }
 
