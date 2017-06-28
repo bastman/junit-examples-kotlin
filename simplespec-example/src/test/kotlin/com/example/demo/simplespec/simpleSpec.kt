@@ -39,15 +39,15 @@ class SimpleSpec(private val name: String = "") {
 
 fun simpleSpec(name: String = "", block: SimpleSpec.() -> Unit) {
 
-    val specName:String = if(name.isNotBlank()) {
+    val specName: String = if (name.isNotBlank()) {
         name
     } else {
         val t = Throwable()
         val trace = t.stackTrace
         val caller = trace.find {
-            (! it.isNativeMethod) && (! it.methodName.contains("simpleSpec"))
+            (!it.isNativeMethod) && (!it.methodName.contains("simpleSpec"))
         }
-        when(caller) {
+        when (caller) {
             null -> "$block"
             else -> "${caller.className}.${caller.methodName}"
         }
@@ -59,7 +59,9 @@ fun simpleSpec(name: String = "", block: SimpleSpec.() -> Unit) {
     } catch (all: Throwable) {
         val lineSeparator = System.getProperty("line.separator");
         val messages: List<String> = listOf(
-            "Spec Failed! spec.name=${spec.getName()}",
+            "Spec Failed!",
+            "",
+            "- spec.name: ${spec.getName()}",
             "",
             "- steps: ",
             "",
