@@ -12,6 +12,8 @@ class SimpleSpec(private val name: String = "") {
 
     operator fun <T> String.invoke(block: SimpleSpec.() -> T): T {
         steps += this
+        //return block()
+
         try {
             return block()
         } catch(all: Throwable) {
@@ -34,6 +36,7 @@ class SimpleSpec(private val name: String = "") {
 
             throw multipleFailuresError
         }
+
     }
 }
 
@@ -60,7 +63,7 @@ fun simpleSpec(name: String = "", block: SimpleSpec.() -> Unit) {
         val lineSeparator = System.getProperty("line.separator");
         val messages: List<String> = listOf(
             "Spec Failed!",
-            "",
+            "", "======== SimpleSpec Failed! ======", "",
             "- spec.name: ${spec.getName()}",
             "",
             "- steps: ",
