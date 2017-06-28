@@ -2,4 +2,5 @@ include 'spek-example'
 include 'junit5-vanilla-example'
 include 'kluent-json-example'
 include 'kotlintest-example'
+include 'simplespec-example'
 
