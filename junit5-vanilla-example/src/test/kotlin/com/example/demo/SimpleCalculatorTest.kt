@@ -36,7 +36,7 @@ internal class SimpleCalculatorTest {
         }
     }
 
-    @Test @DisplayName("some stuff")
+    @Test
     fun testSum2() = simpleSpec {
 
         val calc = "given: a calculator" {
@@ -46,12 +46,20 @@ internal class SimpleCalculatorTest {
             calc
         }
 
-        val sum = "when: calling calculator.sum(3,4)" {
+        val sumResult = "when: calling calculator.sum(3,4)" {
             calc.sum(3,4)
         }
 
         "it: should return 7" {
-            sum shouldBe 7
+            sumResult shouldBe 7
+        }
+
+        val subtractResult = "when: calling calculator.subtract(10,4)" {
+            calc.subtract(10,4)
+        }
+
+        "it: should return 6" {
+            subtractResult shouldBe 6
         }
     }
 }

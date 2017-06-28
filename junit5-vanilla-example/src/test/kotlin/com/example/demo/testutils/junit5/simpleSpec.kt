@@ -38,9 +38,22 @@ class SimpleSpec(private val name: String = "") {
 }
 
 fun simpleSpec(name: String = "", block: SimpleSpec.() -> Unit) {
-    //val foo="${block.reflect()}"
-    //val ref = block.reflect()
-    val spec = SimpleSpec(name = name)
+
+    val specName:String = if(name.isNotBlank()) {
+        name
+    } else {
+        val t = Throwable()
+        val trace = t.stackTrace
+        val caller = trace.find {
+            (! it.isNativeMethod) && (! it.methodName.contains("simpleSpec"))
+        }
+        when(caller) {
+            null -> "$block"
+            else -> "${caller.className}.${caller.methodName}"
+        }
+    }
+
+    val spec = SimpleSpec(name = specName)
     try {
         spec.apply(block)
     } catch (all: Throwable) {
