@@ -56,15 +56,15 @@ internal class DynamicCalculatorTest {
                 name = testName, test = test
             ),
             TestCase(
-                a = 5, b = 3, expectedResult = 21,
+                a = 5, b = 0, expectedResult = 5,
                 name = testName, test = test
             ),
             TestCase(
-                a = 5, b = 3, expectedResult = 2,
+                a = 5, b = 1, expectedResult = 4,
                 name = testName, test = test
             ),
             TestCase(
-                a = 5, b = 3, expectedResult = 23,
+                a = 5, b = 2, expectedResult = 3,
                 name = testName, test = test
             )
         )
@@ -110,8 +110,8 @@ internal data class TestCase(
     val a: Int,
     val b: Int,
     val expectedResult: Int,
-    val name: (TestCase) -> String,
-    val test: (TestCase) -> Unit
+    private val name: (TestCase) -> String,
+    private val test: (TestCase) -> Unit
 ) {
 
     fun testName(): String {
