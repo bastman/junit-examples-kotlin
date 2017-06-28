@@ -1,11 +1,18 @@
 package com.example.demo
 
 import com.example.demo.testutils.junit5.assertThat
+import com.example.demo.testutils.junit5.simpleSpec
+import org.amshove.kluent.shouldBe
+import org.amshove.kluent.shouldBeInstanceOf
 import org.amshove.kluent.shouldEqual
 import org.junit.Test
 import org.junit.jupiter.api.DisplayName
 import org.junit.platform.runner.JUnitPlatform
 import org.junit.runner.RunWith
+import org.opentest4j.AssertionFailedError
+import org.opentest4j.MultipleFailuresError
+import java.lang.AssertionError
+import java.util.ArrayList
 
 @RunWith(JUnitPlatform::class)
 internal class SimpleCalculatorTest {
@@ -29,5 +36,27 @@ internal class SimpleCalculatorTest {
         }
     }
 
+    @Test @DisplayName("some stuff")
+    fun testSum2() = simpleSpec {
+
+        val calc = "given: a calculator" {
+            val calc = calculator
+            calculator shouldBeInstanceOf SimpleCalculator::class
+
+            calc
+        }
+
+        val sum = "when: calling calculator.sum(3,4)" {
+            calc.sum(3,4)
+        }
+
+        "it: should return 7" {
+            sum shouldBe 7
+        }
+    }
 }
+
+
+
+
 

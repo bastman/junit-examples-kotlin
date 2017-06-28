@@ -17,6 +17,5 @@ fun <T>assertThat(heading: ()->String, block: ()->T):T {
         failures.add(assertionError)
         val multipleFailuresError = MultipleFailuresError(heading(), failures)
         throw multipleFailuresError
-
     }
 }
