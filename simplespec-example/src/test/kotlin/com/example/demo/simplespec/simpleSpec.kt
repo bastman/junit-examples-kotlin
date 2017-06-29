@@ -1,13 +1,14 @@
 package com.example.demo.simplespec
 
-import org.opentest4j.AssertionFailedError
 import org.opentest4j.MultipleFailuresError
 import java.lang.AssertionError
-import java.util.ArrayList
+import junit.framework.ComparisonFailure as Junit4FrameworkComparisonFailure
+import org.junit.ComparisonFailure as Junit4ComparisonFailure
 
 class SimpleSpec(private val name: String = "") {
-    fun getName(): String = name
     private val steps: MutableList<String> = mutableListOf()
+
+    fun getName(): String = name
     fun getSteps(): List<String> = steps.toList()
 
     operator fun <T> String.invoke(block: SimpleSpec.() -> T): T {
@@ -15,10 +16,13 @@ class SimpleSpec(private val name: String = "") {
         try {
             return block()
         } catch(all: Throwable) {
+            val heading = this
 
-            throw all.toStepFunctionError(heading = this)
+            throw when (all) {
+                is AssertionError -> MultipleFailuresError(heading, listOf(all))
+                else -> all
+            }
         }
-
     }
 }
 
@@ -42,7 +46,7 @@ fun simpleSpec(name: String = "", block: SimpleSpec.() -> Unit) {
     try {
         spec.apply(block)
     } catch (all: Throwable) {
-        val messages: List<String> = listOf(
+        val heading = listOf(
             "Spec Failed!",
             "", "======== Spec Trace ======", "",
             "- spec.name: ${spec.getName()}",
@@ -53,30 +57,13 @@ fun simpleSpec(name: String = "", block: SimpleSpec.() -> Unit) {
             "",
             "- cause:",
             ""
-        )
-        val heading = messages.joinToString(lineSeparator)
+        ).joinToString(lineSeparator)
 
-        throw all.toStepFunctionError(heading=heading)
+        throw when (all) {
+            is AssertionError -> MultipleFailuresError(heading, listOf(all))
+            else -> all
+        }
     }
 }
 
-internal fun Throwable.toStepFunctionError(heading:String):MultipleFailuresError {
-    val failures = ArrayList<Throwable>()
-    val multipleFailuresError = when (this) {
-        is AssertionError -> {
-            failures.add(this)
-            MultipleFailuresError(heading, failures)
-        }
-        else -> {
-            val failure = AssertionFailedError(
-                "$this", this
-            )
-            failures.add(failure)
-            MultipleFailuresError(heading, failures)
-        }
-    }
-
-    return multipleFailuresError
-}
-
-internal val lineSeparator = System.getProperty("line.separator");
+internal val lineSeparator = System.getProperty("line.separator")

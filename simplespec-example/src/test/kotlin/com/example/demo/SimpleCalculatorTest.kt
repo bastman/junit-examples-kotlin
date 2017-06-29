@@ -3,7 +3,7 @@ package com.example.demo
 import com.example.demo.simplespec.simpleSpec
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeInstanceOf
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.junit.platform.runner.JUnitPlatform
 import org.junit.runner.RunWith
 
