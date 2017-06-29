@@ -52,7 +52,7 @@ internal class DynamicCalculatorTest {
                 name = testName, test = test
             ),
             TestCase(
-                a = 5, b = 3, expectedResult = 2,
+                a = 5, b = 3, expectedResult = 2000,
                 name = testName, test = test
             ),
             TestCase(
@@ -60,7 +60,7 @@ internal class DynamicCalculatorTest {
                 name = testName, test = test
             ),
             TestCase(
-                a = 5, b = 1, expectedResult = 4,
+                a = 5, b = 1, expectedResult = 4000,
                 name = testName, test = test
             ),
             TestCase(
